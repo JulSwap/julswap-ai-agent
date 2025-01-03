@@ -13,8 +13,8 @@ const deployTokenAction: Action = {
     "create new token",
     "deploy new token",
   ],
-  description: `Deploy a new BEP20 token on BNB Chain.
-  Requires name, symbol, initial supply and metadata URI.
+  description: `Deploy a new BEP20 token on BSC.
+  Requires name, symbol, and initial supply.
   Initial supply will be in token units.`,
   examples: [
     [
@@ -23,7 +23,6 @@ const deployTokenAction: Action = {
           name: "My Token",
           symbol: "MTK",
           initialSupply: 1000000,
-          uri: "https://metadata.url",
         },
         output: {
           status: "success",
@@ -37,7 +36,6 @@ const deployTokenAction: Action = {
     name: z.string(),
     symbol: z.string(),
     initialSupply: z.number(),
-    uri: z.string().url(),
   }),
   handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
     debug.log("=== DEPLOY TOKEN ACTION START ===");
@@ -48,7 +46,6 @@ const deployTokenAction: Action = {
       input.name,
       input.symbol,
       input.initialSupply,
-      input.uri,
     );
 
     const result = {

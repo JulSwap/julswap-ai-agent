@@ -1,56 +1,56 @@
 import { SonicAgentKit } from "../agent";
 import { debug } from "../utils/debug";
+import { TOKEN_METADATA } from "../constants/token_metadata";
 
-const TOKEN_ABI = [
-  {
-    inputs: [
-      { name: "name", type: "string" },
-      { name: "symbol", type: "string" },
-      { name: "initialSupply", type: "uint256" },
-      { name: "uri", type: "string" },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-];
-
-const TOKEN_BYTECODE = "0x..."; // Add your token contract bytecode here
+const CONTRACT_ABI = TOKEN_METADATA.ABI;
+const CONTRACT_BYTECODE = TOKEN_METADATA.BYTECODE;
 
 export async function deployToken(
   agent: SonicAgentKit,
   name: string,
   symbol: string,
   initialSupply: number,
-  uri: string,
 ): Promise<string> {
   debug.log("=== DEPLOY TOKEN START ===");
   debug.log("Name:", name);
   debug.log("Symbol:", symbol);
   debug.log("Initial Supply:", initialSupply);
-  debug.log("URI:", uri);
 
   try {
     const web3 = agent.connection;
-    const contract = new web3.eth.Contract(TOKEN_ABI);
+    const contract = new web3.eth.Contract(CONTRACT_ABI);
     const deploy = contract.deploy({
-      data: TOKEN_BYTECODE,
+      data: CONTRACT_BYTECODE,
       arguments: [
         name,
         symbol,
         web3.utils.toWei(initialSupply.toString(), "ether"),
-        uri,
       ],
     });
 
-    const gas = await deploy.estimateGas();
-    const gasPrice = await web3.eth.getGasPrice();
+    // First estimate gas
+    const gas = await deploy.estimateGas({
+      from: agent.wallet_address,
+    });
 
+    // Get nonce and gas price
+    const [nonce, gasPrice] = await Promise.all([
+      web3.eth.getTransactionCount(agent.wallet_address),
+      web3.eth.getGasPrice(),
+    ]);
+
+    // Create transaction
+    const tx = {
+      from: agent.wallet_address,
+      nonce: nonce,
+      gas: Math.round(gas * 1.2), // Add 20% buffer
+      gasPrice: gasPrice,
+      data: deploy.encodeABI(),
+    };
+
+    // Sign and send
     const signedTx = await web3.eth.accounts.signTransaction(
-      {
-        data: deploy.encodeConstructorParams(),
-        gas,
-        gasPrice,
-      },
+      tx,
       process.env.SONIC_PRIVATE_KEY!,
     );
 

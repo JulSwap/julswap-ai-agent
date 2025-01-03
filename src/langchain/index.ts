@@ -80,8 +80,8 @@ export class SonicDeployTokenTool extends Tool {
   name = "sonic_deploy_token";
   description = `Deploy a new token on the blockchain.
   Current wallet address: ${this.sonickit?.wallet_address}
-  Format: deploy_token {name} {symbol} {initial_supply} {uri}
-  Example: deploy_token "My Token" MTK 1000000 "https://metadata.url"`;
+  Format: deploy_token {name} {symbol} {initial_supply}
+  Example: deploy_token "My Token" MTK 1000000`;
 
   constructor(private sonickit: SonicAgentKit) {
     super();
@@ -93,30 +93,27 @@ export class SonicDeployTokenTool extends Tool {
 
       // Parse token details from input string
       const match = input.match(
-        /deploy_token\s+"([^"]+)"\s+(\w+)\s+(\d+)\s+"([^"]+)"/i,
+        /(?:create|deploy|launch)?\s*(?:a\s+)?(?:new\s+)?token\s*"?([^"\n]+)"?\s+(\w+)\s+(\d+)/i,
       );
       if (!match) {
         throw new Error(
-          'Invalid input format. Expected: deploy_token "Token Name" SYMBOL 1000000 "https://metadata.url"',
+          "Please provide: token name, symbol and initial supply. " +
+            "For example: 'create token My Token MTK 1000000' or 'deploy token Test TTK 500000'",
         );
       }
 
-      const [, name, symbol, supply, uri] = match;
+      const [, name, symbol, supply] = match;
       const parsedInput = {
         name,
         symbol,
         initialSupply: parseInt(supply),
-        uri,
       };
 
       debug.log("Parsed deploy input:", parsedInput);
 
-      const result = await deployToken(
+      const result = await ACTIONS.DEPLOY_TOKEN_ACTION.handler(
         this.sonickit,
-        parsedInput.name,
-        parsedInput.symbol,
-        parsedInput.initialSupply,
-        parsedInput.uri,
+        parsedInput,
       );
 
       return JSON.stringify({
@@ -132,10 +129,46 @@ export class SonicDeployTokenTool extends Tool {
   }
 }
 
+export class SonicPriceTool extends Tool {
+  name = "sonic_price";
+  description = `Get the price of a token on BSC.
+  Format: get price {token_address}
+  Example: get price 0xf5d8015d625be6f59b8073c8189bd51ba28792e1
+  Price will be returned in USD.`;
+
+  constructor(private sonickit: SonicAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      debug.log("Price input:", input);
+
+      // Extract any ethereum address from the input
+      const address = input.match(/0x[a-fA-F0-9]{40}/i)?.[0];
+      if (!address) {
+        throw new Error("Please provide a token address to check its price.");
+      }
+
+      const result = await ACTIONS.PRICE_ACTION.handler(this.sonickit, {
+        tokenAddress: address,
+      });
+
+      return `The price of the token with address \`${address}\` is **$${result.price}** USD.`;
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
 export function createSonicTools(sonicKit: SonicAgentKit) {
   return [
     new SonicBalanceTool(sonicKit),
     new SonicTransferTool(sonicKit),
     new SonicDeployTokenTool(sonicKit),
+    new SonicPriceTool(sonicKit),
   ];
 }

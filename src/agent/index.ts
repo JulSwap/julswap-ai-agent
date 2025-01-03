@@ -4,6 +4,8 @@ import { debug } from "../utils/debug";
 import { Config } from "../types";
 import {
   get_balance,
+  fetchPrice,
+  transfer,
   /* deploy_collection,
   deploy_token,
   get_balance_other,
@@ -50,6 +52,7 @@ import {
   listNFTForSale,
   cancelListing, */
 } from "../tools";
+import type { TokenPriceResponse } from "../tools/fetch_price";
 
 /* import {
   CollectionDeployment,
@@ -121,4 +124,8 @@ export class SonicAgentKit {
   async getBalance(walletAddress?: string): Promise<number> {
     return get_balance(this, walletAddress);
   }
+  async fetchPrice(tokenId: string): Promise<TokenPriceResponse> {
+    return fetchPrice(tokenId);
+  }
+
 }
