@@ -1,14 +1,14 @@
 import { VersionedTransaction } from "@solana/web3.js";
-import { SonicAgentKit } from "../index";
+import { JulswapAgentKit } from "../index";
 
 /**
  * Lend tokens for yields using Lulo
- * @param agent SonicAgentKit instance
+ * @param agent JulswapAgentKit instance
  * @param amount Amount of USDC to lend
  * @returns Transaction signature
  */
 export async function lendAsset(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   amount: number,
 ): Promise<string> {
   try {

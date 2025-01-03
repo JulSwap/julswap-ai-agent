@@ -1,4 +1,4 @@
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { debug } from "../utils/debug";
 import { TOKEN_METADATA } from "../constants/token_metadata";
 
@@ -6,7 +6,7 @@ const CONTRACT_ABI = TOKEN_METADATA.ABI;
 const CONTRACT_BYTECODE = TOKEN_METADATA.BYTECODE;
 
 export async function deployToken(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   name: string,
   symbol: string,
   initialSupply: number,
@@ -51,7 +51,7 @@ export async function deployToken(
     // Sign and send
     const signedTx = await web3.eth.accounts.signTransaction(
       tx,
-      process.env.SONIC_PRIVATE_KEY!,
+      process.env.PRIVATE_KEY!,
     );
 
     if (!signedTx.rawTransaction) {

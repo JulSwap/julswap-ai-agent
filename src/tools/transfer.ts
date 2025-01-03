@@ -1,4 +1,4 @@
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { debug } from "../utils/debug";
 
 const ERC20_ABI = [
@@ -22,7 +22,7 @@ const ERC20_ABI = [
 ];
 
 export async function transfer(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   to: string,
   amount: number,
   tokenAddress?: string,
@@ -52,7 +52,7 @@ export async function transfer(
       // Sign and send the transaction
       const signedTx = await web3.eth.accounts.signTransaction(
         transaction,
-        process.env.SONIC_PRIVATE_KEY!,
+        process.env.PRIVATE_KEY!,
       );
 
       if (!signedTx.rawTransaction) {

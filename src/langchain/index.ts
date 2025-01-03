@@ -1,5 +1,5 @@
 import { Tool } from "langchain/tools";
-import { SonicAgentKit } from "../index";
+import { JulswapAgentKit } from "../index";
 import { ACTIONS } from "../actions";
 import { debug } from "../utils/debug";
 import { BNB_ADDRESS, BUSD_ADDRESS, DEFAULT_SLIPPAGE } from "../constants";
@@ -11,7 +11,7 @@ export class SonicBalanceTool extends Tool {
   If no address is provided, returns the agent's own wallet balance.
   Balance will be returned in BNB.`;
 
-  constructor(private sonickit: SonicAgentKit) {
+  constructor(private sonickit: JulswapAgentKit) {
     super();
   }
 
@@ -37,7 +37,7 @@ export class SonicTransferTool extends Tool {
   Format: transfer {amount} BNB to {address}
   Example: transfer 0.1 BNB to 0x1234...`;
 
-  constructor(private sonickit: SonicAgentKit) {
+  constructor(private sonickit: JulswapAgentKit) {
     super();
   }
 
@@ -84,7 +84,7 @@ export class SonicDeployTokenTool extends Tool {
   Format: deploy_token {name} {symbol} {initial_supply}
   Example: deploy_token "My Token" MTK 1000000`;
 
-  constructor(private sonickit: SonicAgentKit) {
+  constructor(private sonickit: JulswapAgentKit) {
     super();
   }
 
@@ -137,7 +137,7 @@ export class SonicPriceTool extends Tool {
   Example: get price 0xf5d8015d625be6f59b8073c8189bd51ba28792e1
   Price will be returned in USD.`;
 
-  constructor(private sonickit: SonicAgentKit) {
+  constructor(private sonickit: JulswapAgentKit) {
     super();
   }
 
@@ -174,7 +174,7 @@ export class SonicTradeTool extends Tool {
   - trade 0.1 bnb to busd
   - trade 100 busd to bnb`;
 
-  constructor(private sonickit: SonicAgentKit) {
+  constructor(private sonickit: JulswapAgentKit) {
     super();
   }
 
@@ -212,7 +212,7 @@ export class SonicTradeTool extends Tool {
   }
 }
 
-export function createSonicTools(sonicKit: SonicAgentKit) {
+export function createSonicTools(sonicKit: JulswapAgentKit) {
   return [
     new SonicBalanceTool(sonicKit),
     new SonicTransferTool(sonicKit),

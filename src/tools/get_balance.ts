@@ -1,14 +1,14 @@
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { debug } from "../utils/debug";
 
 /**
  * Get the balance of BNB for a wallet
- * @param agent - SonicAgentKit instance
+ * @param agent - JulswapAgentKit instance
  * @param wallet_address - Optional wallet address. If not provided, returns agent's wallet balance
  * @returns Promise resolving to the balance in BNB
  */
 export async function get_balance(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   wallet_address?: string,
 ): Promise<number> {
   debug.log("=== GET_BALANCE START ===");

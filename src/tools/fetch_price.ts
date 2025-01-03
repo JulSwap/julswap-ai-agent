@@ -1,4 +1,4 @@
-import { SonicAgentKit } from "../index";
+import { JulswapAgentKit } from "../index";
 /**
  * Fetch the token price on BSC using GeckoTerminal API v2
  * @param tokenId The token contract address

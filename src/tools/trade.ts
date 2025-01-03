@@ -1,4 +1,4 @@
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { debug } from "../utils/debug";
 import { OPEN_OCEAN_API_URL, REFERRAL_ADDRESS } from "../constants";
 
@@ -26,7 +26,7 @@ const ERC20_ABI = [
 ];
 
 async function approveToken(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   tokenAddress: string,
   spenderAddress: string,
   amount: string
@@ -77,7 +77,7 @@ async function approveToken(
     // Sign and send transaction
     const signedTx = await agent.connection.eth.accounts.signTransaction(
       tx,
-      process.env.SONIC_PRIVATE_KEY!,
+      process.env.PRIVATE_KEY!,
     );
 
     if (!signedTx.rawTransaction) {
@@ -105,7 +105,7 @@ interface SwapQuote {
 }
 
 export async function trade(
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   fromToken: string,
   toToken: string,
   amount: string,
@@ -255,7 +255,7 @@ export async function trade(
 
         const signedTx = await agent.connection.eth.accounts.signTransaction(
           tx,
-          process.env.SONIC_PRIVATE_KEY!,
+          process.env.PRIVATE_KEY!,
         );
 
         if (!signedTx.rawTransaction) {

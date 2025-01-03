@@ -1,5 +1,5 @@
 import { Action } from "../types/action";
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { ACTIONS } from "../actions";
 
 /**
@@ -19,7 +19,7 @@ export function findAction(query: string): Action | undefined {
  */
 export async function executeAction(
   action: Action,
-  agent: SonicAgentKit,
+  agent: JulswapAgentKit,
   input: Record<string, any>,
 ): Promise<Record<string, any>> {
   try {

@@ -68,13 +68,13 @@ import type { TokenPriceResponse } from "../tools/fetch_price";
  * Main class for interacting with Solana blockchain
  * Provides a unified interface for token operations, NFT management, trading and more
  *
- * @class SonicAgentKit
+ * @class JulswapAgentKit
  * @property {Connection} connection - Solana RPC connection
  * @property {Keypair} wallet - Wallet keypair for signing transactions
  * @property {PublicKey} wallet_address - Public key of the wallet
  * @property {Config} config - Configuration object
  */
-export class SonicAgentKit {
+export class JulswapAgentKit {
   public connection: any;
   public wallet_address: string;
   public config: Config;
@@ -83,7 +83,7 @@ export class SonicAgentKit {
    * @deprecated Using openai_api_key directly in constructor is deprecated.
    * Please use the new constructor with Config object instead:
    * @example
-   * const agent = new SonicAgentKit(privateKey, rpcUrl, {
+   * const agent = new JulswapAgentKit(privateKey, rpcUrl, {
    *   OPENAI_API_KEY: 'your-key'
    * });
    */

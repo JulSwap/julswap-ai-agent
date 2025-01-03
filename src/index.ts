@@ -1,7 +1,7 @@
-import { SonicAgentKit } from "./agent";
+import { JulswapAgentKit } from "./agent";
 import { createSonicTools } from "./langchain";
 
-export { SonicAgentKit, createSonicTools };
+export { JulswapAgentKit, createSonicTools };
 
 // Optional: Export types that users might need
 export * from "./types";

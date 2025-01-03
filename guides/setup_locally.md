@@ -1,6 +1,6 @@
 # How to Setup Locally
 
-Setting up the **Solana Agent Kit** on your local machine involves cloning the repository, installing dependencies, configuring environment variables, and building the project. Follow the steps below to get started.
+Setting up the **Julswap Agent Kit** on your local machine involves cloning the repository, installing dependencies, configuring environment variables, and building the project. Follow the steps below to get started.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Setting up the **Solana Agent Kit** on your local machine involves cloning the r
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/solana-agent-kit.git
+   git clone 
    ```
 
 2. **Navigate to the Project Directory**
@@ -33,12 +33,12 @@ Setting up the **Solana Agent Kit** on your local machine involves cloning the r
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
    RPC_URL=your_rpc_url
-   SOLANA_PRIVATE_KEY=your_solana_private_key_here
+   PRIVATE_KEY=your_evm_private_key_here
    ```
 
    - **OPENAI_API_KEY**: Your OpenAI API key for generating images and interacting with OpenAI services.
    - **RPC_URL**: Your RPC_URL for Solana blockchain interactions.
-   - **SOLANA_PRIVATE_KEY**: Your Solana wallet's private key in base58 format.
+   - **PRIVATE_KEY**: Your Solana wallet's private key in base58 format.
 
    **Note:** Ensure that the `.env` file is added to `.gitignore` to prevent exposing sensitive information.
 

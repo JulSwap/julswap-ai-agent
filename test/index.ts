@@ -7,7 +7,7 @@ debug.enable();
 process.env.LANGCHAIN_VERBOSE = "false";
 process.env.OPENAI_API_DEBUG = "false";
 
-import { SonicAgentKit, ACTIONS } from "../src";
+import { JulswapAgentKit, ACTIONS } from "../src";
 import { createSonicTools } from "../src/langchain";
 import { HumanMessage } from "@langchain/core/messages";
 import { MemorySaver } from "@langchain/langgraph";
@@ -21,7 +21,7 @@ dotenv.config();
 
 function validateEnvironment(): void {
   const missingVars: string[] = [];
-  const requiredVars = ["OPENAI_API_KEY", "SONIC_RPC_URL", "SONIC_PRIVATE_KEY"];
+  const requiredVars = ["OPENAI_API_KEY", "RPC_URL", "PRIVATE_KEY"];
 
   requiredVars.forEach((varName) => {
     if (!process.env[varName]) {
@@ -59,9 +59,9 @@ async function initializeAgent() {
       }
     }
 
-    const sonicAgent = new SonicAgentKit(
-      process.env.SONIC_PRIVATE_KEY!,
-      process.env.SONIC_RPC_URL!,
+    const sonicAgent = new JulswapAgentKit(
+      process.env.PRIVATE_KEY!,
+      process.env.RPC_URL!,
       {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
       },
@@ -75,7 +75,7 @@ async function initializeAgent() {
     const web3 = sonicAgent.connection;
     const [chainId, nodeInfo] = await Promise.all([
       web3.eth.getChainId(),
-      web3.eth.getNodeInfo()
+      web3.eth.getNodeInfo(),
     ]);
     console.log(`Connected to network:
       Chain ID: ${chainId}
@@ -97,7 +97,7 @@ async function initializeAgent() {
         faucet. If not, you can provide your wallet details and request funds from the user. If there is a 5XX
         (internal) HTTP error code, ask the user to try again later. If someone asks you to do something you
         can't do with your currently available tools, you must say so, and encourage them to implement it
-        themselves using the Sonic Agent Kit, recommend they go to https://www.sonicagentkit.xyz for more information. Be
+        themselves using the Sonic Agent Kit, recommend they go to https://julswap.com for more information. Be
         concise and helpful with your responses. Refrain from restating your tools' descriptions unless it is explicitly requested.
       `,
     });

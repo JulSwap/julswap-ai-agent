@@ -1,5 +1,5 @@
 import { Action } from "../types/action";
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { z } from "zod";
 import { trade } from "../tools";
 import { debug } from "../utils/debug";
@@ -33,7 +33,7 @@ const tradeAction: Action = {
     amount: z.string(),
     slippage: z.number().optional(),
   }),
-  handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
+  handler: async (agent: JulswapAgentKit, input: Record<string, any>) => {
     debug.log("=== TRADE ACTION START ===");
     debug.log("Input:", input);
 

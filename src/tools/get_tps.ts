@@ -1,6 +1,6 @@
-import { SonicAgentKit } from "../index";
+import { JulswapAgentKit } from "../index";
 
-export async function getTPS(agent: SonicAgentKit): Promise<number> {
+export async function getTPS(agent: JulswapAgentKit): Promise<number> {
   const perfSamples = await agent.connection.getRecentPerformanceSamples();
 
   if (

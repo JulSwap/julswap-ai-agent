@@ -1,7 +1,7 @@
 {
-  "name": "sonic-agent-kit",
-  "version": "0.0.1",
-  "description": "connect any ai agents to sonic protocols",
+  "name": "julswap-agent-kit",
+  "version": "1.0.32",
+  "description": "connect any ai agents to julswap protocols",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -18,7 +18,7 @@
     "pnpm": ">=8.0.0"
   },
   "keywords": [],
-  "author": "sendaifun",
+  "author": "julswap",
   "license": "Apache-2.0",
   "dependencies": {
     "@bonfida/spl-name-service": "^3.0.7",
@@ -41,8 +41,6 @@
     "@orca-so/whirlpools-sdk": "^0.13.12",
     "@pythnetwork/price-service-client": "^1.9.0",
     "@raydium-io/raydium-sdk-v2": "0.1.95-alpha",
-    "@solana/spl-token": "^0.4.9",
-    "@solana/web3.js": "^1.98.0",
     "@tensor-oss/tensorswap-sdk": "^4.5.0",
     "@tiplink/api": "^0.3.1",
     "bn.js": "^5.2.1",

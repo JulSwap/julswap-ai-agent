@@ -1,5 +1,5 @@
 import { Action } from "../types/action";
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { z } from "zod";
 import { get_balance } from "../tools";
 import { debug } from "../utils/debug";
@@ -45,7 +45,7 @@ const balanceAction: Action = {
   schema: z.object({
     tokenAddress: z.string().optional(),
   }),
-  handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
+  handler: async (agent: JulswapAgentKit, input: Record<string, any>) => {
     debug.log("=== BALANCE ACTION START ===");
     debug.log("Input:", input);
     debug.log("Agent wallet:", agent.wallet_address);

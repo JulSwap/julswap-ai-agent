@@ -1,5 +1,5 @@
 import { Action } from "../types/action";
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { z } from "zod";
 import { transfer } from "../tools";
 import { debug } from "../utils/debug";
@@ -37,7 +37,7 @@ const transferAction: Action = {
     amount: z.number(),
     tokenAddress: z.string().optional(),
   }),
-  handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
+  handler: async (agent: JulswapAgentKit, input: Record<string, any>) => {
     debug.log("=== TRANSFER ACTION START ===");
     debug.log("Input:", input);
 

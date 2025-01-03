@@ -1,5 +1,5 @@
 import { Action } from "../types/action";
-import { SonicAgentKit } from "../agent";
+import { JulswapAgentKit } from "../agent";
 import { z } from "zod";
 import { fetchPrice } from "../tools";
 import { debug } from "../utils/debug";
@@ -35,7 +35,7 @@ const priceAction: Action = {
   schema: z.object({
     tokenAddress: z.string(),
   }),
-  handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
+  handler: async (agent: JulswapAgentKit, input: Record<string, any>) => {
     debug.log("=== PRICE ACTION START ===");
     debug.log("Input:", input);
 
