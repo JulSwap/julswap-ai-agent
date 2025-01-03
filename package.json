@@ -1,6 +1,6 @@
 {
   "name": "julswap-agent-kit",
-  "version": "1.0.33",
+  "version": "1.0.35",
   "description": "connect any ai agents to julswap protocols",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
