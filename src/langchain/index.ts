@@ -4,6 +4,7 @@ import { ACTIONS } from "../actions";
 import { debug } from "../utils/debug";
 import { BNB_ADDRESS, BUSD_ADDRESS, DEFAULT_SLIPPAGE } from "../constants";
 
+
 export class SonicBalanceTool extends Tool {
   name = "sonic_balance";
   description = `Get the BNB balance of a wallet address.
@@ -212,6 +213,57 @@ export class SonicTradeTool extends Tool {
   }
 }
 
+export class SonicGetTokenDataTool extends Tool {
+  name = "sonic_token_data";
+  description = `Get detailed token information including price, market cap, volume etc.
+  Format: get token data {address or ticker}
+  Example: get token data JULD`;
+
+  constructor(private sonickit: JulswapAgentKit) {
+    super();
+  }
+
+  async formatResponse(token: any) {
+    return [
+      `Here are the details for the token ${token.symbol} (${token.name}):`,
+      "",
+      `• Name: ${token.name}`,
+      `• Symbol: ${token.symbol}`,
+      `• Decimals: ${token.decimals}`,
+      `• Total Supply: ${token.totalSupply}`,
+      `• Price: $${token.price}`,
+      `• Fully Diluted Value: $${token.fdv}`,
+      `• Market Cap: $${token.marketCap}`,
+      `• 24h Volume: $${token.volume24h}`,
+      ""
+    ].join("\n");
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const isAddress = input.match(/0x[a-fA-F0-9]{40}/i);
+      const data = isAddress
+        ? await ACTIONS.GET_TOKEN_DATA_BY_ADDRESS.handler(this.sonickit, {
+            address: input,
+          })
+        : await ACTIONS.GET_TOKEN_DATA_BY_TICKER.handler(this.sonickit, {
+            ticker: input,
+          });
+
+      if (!data?.data) {
+        throw new Error("Token data not found");
+      }
+
+      return this.formatResponse(data.data);
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
 export function createSonicTools(sonicKit: JulswapAgentKit) {
   return [
     new SonicBalanceTool(sonicKit),
@@ -219,5 +271,6 @@ export function createSonicTools(sonicKit: JulswapAgentKit) {
     new SonicDeployTokenTool(sonicKit),
     new SonicPriceTool(sonicKit),
     new SonicTradeTool(sonicKit),
+    new SonicGetTokenDataTool(sonicKit),
   ];
 }

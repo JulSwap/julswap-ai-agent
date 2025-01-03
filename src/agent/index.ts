@@ -1,11 +1,14 @@
 import Web3 from "web3";
 import { debug } from "../utils/debug";
 // import { DEFAULT_OPTIONS } from "../constants";
-import { Config } from "../types";
+import { Config, EvmTokenData } from "../types";
 import {
   get_balance,
   fetchPrice,
   transfer,
+  trade,
+  getTokenDataByAddress,
+  getTokenDataByTicker,
   /* deploy_collection,
   deploy_token,
   get_balance_other,
@@ -65,21 +68,21 @@ import type { TokenPriceResponse } from "../tools/fetch_price";
 } from "../types"; */
 
 /**
- * Main class for interacting with Solana blockchain
+ * Main class for interacting with EVM blockchain
  * Provides a unified interface for token operations, NFT management, trading and more
  *
  * @class JulswapAgentKit
- * @property {Connection} connection - Solana RPC connection
+ * @property {Connection} connection - EVM RPC connection
  * @property {Keypair} wallet - Wallet keypair for signing transactions
  * @property {PublicKey} wallet_address - Public key of the wallet
  * @property {Config} config - Configuration object
  */
 export class JulswapAgentKit {
   public connection: any;
-  public private_key : string;
+  public private_key: string;
   public wallet_address: string;
   public config: Config;
-
+  public chain: string = "";
   /**
    * @deprecated Using openai_api_key directly in constructor is deprecated.
    * Please use the new constructor with Config object instead:
@@ -96,6 +99,21 @@ export class JulswapAgentKit {
     const web3 = new Web3(rpc_url);
     this.connection = web3;
     this.private_key = private_key;
+
+    // Fix chainId assignment and chain mapping
+    (async () => {
+      const chainId = Number(await web3.eth.getChainId());
+
+      const chains: { [key: number]: string } = {
+        1: "ethereum",
+        56: "bsc",
+        137: "polygon",
+        42161: "arbitrum",
+        43114: "avalanche",
+      };
+      this.chain = chains[chainId];
+    })();
+
     // Add 0x prefix if not present
     const formattedKey = private_key.startsWith("0x")
       ? private_key
@@ -130,4 +148,29 @@ export class JulswapAgentKit {
     return fetchPrice(tokenId);
   }
 
+  async transfer(
+    walletAddress: string,
+    amount: number,
+    tokenId: string,
+  ): Promise<string> {
+    return transfer(this, walletAddress, amount, tokenId);
+  }
+
+  async trade(
+    walletAddress: string,
+    amount: number,
+    tokenId: string,
+  ): Promise<string> {
+    return trade(this, walletAddress, amount.toString(), tokenId);
+  }
+
+  async getTokenData(tokenAddress: string): Promise<EvmTokenData | undefined> {
+    return getTokenDataByAddress(this, tokenAddress);
+  }
+
+  async getTokenDataByTicker(
+    ticker: string,
+  ): Promise<EvmTokenData | undefined> {
+    return getTokenDataByTicker(ticker, this);
+  }
 }

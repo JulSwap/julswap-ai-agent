@@ -1,33 +1,69 @@
-import { PublicKey } from "@solana/web3.js";
-import { JupiterTokenData } from "../types";
+import { EvmTokenData } from "../types";
+import { JulswapAgentKit } from "../agent";
 
 export async function getTokenDataByAddress(
-  mint: PublicKey,
-): Promise<JupiterTokenData | undefined> {
+  agent: JulswapAgentKit,
+  mint: string,
+): Promise<EvmTokenData | undefined> {
   try {
-    if (!mint) {
-      throw new Error("Mint address is required");
-    }
-
-    const response = await fetch("https://tokens.jup.ag/tokens?tags=verified", {
-      method: "GET",
+    const url = `https://api.geckoterminal.com/api/v2/networks/${agent.chain}/tokens/${mint}`;
+    const response = await fetch(url, {
       headers: {
-        "Content-Type": "application/json",
+        accept: "application/json",
       },
     });
 
-    const data = (await response.json()) as JupiterTokenData[];
-    const token = data.find((token: JupiterTokenData) => {
-      return token.address === mint.toBase58();
-    });
-    return token;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch token data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const attrs = data.data?.attributes;
+
+    if (!attrs) {
+      return undefined;
+    }
+
+    // Format numbers to be human readable
+    const formatNumber = (num: string | number) => {
+      const value = Number(num);
+      if (value >= 1e9) {
+        return `${(value / 1e9).toFixed(2)}B`;
+      } else if (value >= 1e6) {
+        return `${(value / 1e6).toFixed(2)}M`;
+      } else if (value >= 1e3) {
+        return `${(value / 1e3).toFixed(2)}K`;
+      }
+      return value.toLocaleString('en-US', {
+        maximumFractionDigits: 2
+      });
+    };
+
+    // Convert total supply from wei to tokens
+    const totalSupply = attrs.total_supply 
+      ? Number(attrs.total_supply) / Math.pow(10, attrs.decimals)
+      : 0;
+
+    return {
+      address: mint,
+      name: attrs.name,
+      symbol: attrs.symbol,
+      decimals: attrs.decimals,
+      totalSupply: formatNumber(totalSupply),
+      price: `$${Number(attrs.price_usd).toFixed(6)}`,
+      fdv: `$${formatNumber(attrs.fdv_usd)}`,
+      marketCap: `$${formatNumber(attrs.market_cap_usd)}`,
+      volume24h: `$${formatNumber(attrs.volume_usd.h24)}`,
+    };
   } catch (error: any) {
-    throw new Error(`Error fetching token data: ${error.message}`);
+    console.error("Error fetching token data:", error);
+    return undefined;
   }
 }
 
 export async function getTokenAddressFromTicker(
   ticker: string,
+  agent: JulswapAgentKit,
 ): Promise<string | null> {
   try {
     const response = await fetch(
@@ -40,17 +76,17 @@ export async function getTokenAddressFromTicker(
     }
 
     // Filter for Solana pairs only and sort by FDV
-    let solanaPairs = data.pairs
-      .filter((pair: any) => pair.chainId === "solana")
+    const evmPairs = data.pairs
+      .filter((pair: any) => pair.chainId === agent.chain)
       .sort((a: any, b: any) => (b.fdv || 0) - (a.fdv || 0));
 
-    solanaPairs = solanaPairs.filter(
+    const tokenPairs = evmPairs.filter(
       (pair: any) =>
         pair.baseToken.symbol.toLowerCase() === ticker.toLowerCase(),
     );
 
     // Return the address of the highest FDV Solana pair
-    return solanaPairs[0].baseToken.address;
+    return tokenPairs[0].baseToken.address;
   } catch (error) {
     console.error("Error fetching token address from DexScreener:", error);
     return null;
@@ -59,10 +95,11 @@ export async function getTokenAddressFromTicker(
 
 export async function getTokenDataByTicker(
   ticker: string,
-): Promise<JupiterTokenData | undefined> {
-  const address = await getTokenAddressFromTicker(ticker);
+  agent: JulswapAgentKit,
+): Promise<EvmTokenData | undefined> {
+  const address = await getTokenAddressFromTicker(ticker, agent);
   if (!address) {
     throw new Error(`Token address not found for ticker: ${ticker}`);
   }
-  return getTokenDataByAddress(new PublicKey(address));
+  return getTokenDataByAddress(agent, address);
 }
