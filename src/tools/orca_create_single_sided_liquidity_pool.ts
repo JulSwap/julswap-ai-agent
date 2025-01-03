@@ -4,7 +4,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { BN, Wallet } from "@coral-xyz/anchor";
 import { Decimal } from "decimal.js";
 import {
@@ -83,7 +83,7 @@ export const FEE_TIERS = {
  * on-chain the Whirlpool might be configured as USDC/SHARK instead of SHARK/USDC, and the on-chain price will
  * be 1/`initialPrice`. This will not affect the price of the token as you intended it to be.
  *
- * @param agent - The `SolanaAgentKit` instance representing the wallet and connection details.
+ * @param agent - The `SonicAgentKit` instance representing the wallet and connection details.
  * @param depositTokenAmount - The amount of the deposit token to deposit in the pool.
  * @param depositTokenMint - The mint address of the token being deposited into the pool, eg. SHARK.
  * @param otherTokenMint - The mint address of the other token in the pool, eg. USDC.
@@ -102,7 +102,7 @@ export const FEE_TIERS = {
  * and the function manages mint order and necessary calculations.
  */
 export async function orcaCreateSingleSidedLiquidityPool(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   depositTokenAmount: number,
   depositTokenMint: PublicKey,
   otherTokenMint: PublicKey,

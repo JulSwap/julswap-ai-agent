@@ -1,75 +1,72 @@
-import { SolanaAgentKit } from "../index";
-import { PublicKey } from "@solana/web3.js";
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { generateSigner, keypairIdentity } from "@metaplex-foundation/umi";
-import {
-  createFungible,
-  mintV1,
-  TokenStandard,
-} from "@metaplex-foundation/mpl-token-metadata";
-import {
-  fromWeb3JsKeypair,
-  fromWeb3JsPublicKey,
-  toWeb3JsPublicKey,
-} from "@metaplex-foundation/umi-web3js-adapters";
-import { mplToolbox } from "@metaplex-foundation/mpl-toolbox";
+import { SonicAgentKit } from "../agent";
+import { debug } from "../utils/debug";
 
-/**
- * Deploy a new SPL token
- * @param agent SolanaAgentKit instance
- * @param name Name of the token
- * @param uri URI for the token metadata
- * @param symbol Symbol of the token
- * @param decimals Number of decimals for the token (default: 9)
- * @param initialSupply Initial supply to mint (optional)
- * @returns Object containing token mint address and initial account (if supply was minted)
- */
-export async function deploy_token(
-  agent: SolanaAgentKit,
+const TOKEN_ABI = [
+  {
+    inputs: [
+      { name: "name", type: "string" },
+      { name: "symbol", type: "string" },
+      { name: "initialSupply", type: "uint256" },
+      { name: "uri", type: "string" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+];
+
+const TOKEN_BYTECODE = "0x..."; // Add your token contract bytecode here
+
+export async function deployToken(
+  agent: SonicAgentKit,
   name: string,
-  uri: string,
   symbol: string,
-  decimals: number = 9,
-  initialSupply?: number,
-): Promise<{ mint: PublicKey }> {
+  initialSupply: number,
+  uri: string,
+): Promise<string> {
+  debug.log("=== DEPLOY TOKEN START ===");
+  debug.log("Name:", name);
+  debug.log("Symbol:", symbol);
+  debug.log("Initial Supply:", initialSupply);
+  debug.log("URI:", uri);
+
   try {
-    // Create UMI instance from agent
-    const umi = createUmi(agent.connection.rpcEndpoint).use(mplToolbox());
-    umi.use(keypairIdentity(fromWeb3JsKeypair(agent.wallet)));
-
-    // Create new token mint
-    const mint = generateSigner(umi);
-
-    let builder = createFungible(umi, {
-      name,
-      uri,
-      symbol,
-      sellerFeeBasisPoints: {
-        basisPoints: 0n,
-        identifier: "%",
-        decimals: 2,
-      },
-      decimals,
-      mint,
+    const web3 = agent.connection;
+    const contract = new web3.eth.Contract(TOKEN_ABI);
+    const deploy = contract.deploy({
+      data: TOKEN_BYTECODE,
+      arguments: [
+        name,
+        symbol,
+        web3.utils.toWei(initialSupply.toString(), "ether"),
+        uri,
+      ],
     });
 
-    if (initialSupply) {
-      builder = builder.add(
-        mintV1(umi, {
-          mint: mint.publicKey,
-          tokenStandard: TokenStandard.Fungible,
-          tokenOwner: fromWeb3JsPublicKey(agent.wallet_address),
-          amount: initialSupply * Math.pow(10, decimals),
-        }),
-      );
+    const gas = await deploy.estimateGas();
+    const gasPrice = await web3.eth.getGasPrice();
+
+    const signedTx = await web3.eth.accounts.signTransaction(
+      {
+        data: deploy.encodeConstructorParams(),
+        gas,
+        gasPrice,
+      },
+      process.env.SONIC_PRIVATE_KEY!,
+    );
+
+    if (!signedTx.rawTransaction) {
+      throw new Error("Failed to sign transaction");
     }
 
-    builder.sendAndConfirm(umi, { confirm: { commitment: "finalized" } });
+    const result = await web3.eth.sendSignedTransaction(
+      signedTx.rawTransaction,
+    );
+    debug.log("Token deployed at:", result.contractAddress);
+    debug.log("=== DEPLOY TOKEN END ===");
 
-    return {
-      mint: toWeb3JsPublicKey(mint.publicKey),
-    };
+    return result.contractAddress;
   } catch (error: any) {
+    debug.log("Deploy token error:", error.message);
     throw new Error(`Token deployment failed: ${error.message}`);
   }
 }

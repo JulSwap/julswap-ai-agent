@@ -4,7 +4,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { Wallet } from "@coral-xyz/anchor";
 import {
   ORCA_WHIRLPOOL_PROGRAM_ID,
@@ -22,7 +22,7 @@ import { Percentage } from "@orca-so/common-sdk";
  * the position's mint address.
  *
  * ## Parameters
- * - `agent`: The `SolanaAgentKit` instance representing the wallet and connection details.
+ * - `agent`: The `SonicAgentKit` instance representing the wallet and connection details.
  * - `positionMintAddress`: The mint address of the liquidity position to close.
  *
  * ## Returns
@@ -39,12 +39,12 @@ import { Percentage } from "@orca-so/common-sdk";
  * - The transaction fails to send.
  * - Any required position or Whirlpool data cannot be fetched.
  *
- * @param agent - The `SolanaAgentKit` instance representing the wallet and connection.
+ * @param agent - The `SonicAgentKit` instance representing the wallet and connection.
  * @param positionMintAddress - The mint address of the liquidity position to close.
  * @returns A promise resolving to the transaction ID (`string`).
  */
 export async function orcaClosePosition(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   positionMintAddress: PublicKey,
 ): Promise<string> {
   try {

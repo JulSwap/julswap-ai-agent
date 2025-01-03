@@ -1,6 +1,6 @@
 import { getPrimaryDomain as _getPrimaryDomain } from "@bonfida/spl-name-service";
 import { PublicKey } from "@solana/web3.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 /**
  * Retrieves the primary .sol domain associated with a given Solana public key.
@@ -9,13 +9,13 @@ import { SolanaAgentKit } from "../index";
  * a specified Solana public key. If the primary domain is stale or an error occurs during
  * the resolution, it throws an error.
  *
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param account The Solana public key for which to retrieve the primary domain
  * @returns A promise that resolves to the primary .sol domain as a string
  * @throws Error if the domain is stale or if the domain resolution fails
  */
 export async function getPrimaryDomain(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   account: PublicKey,
 ): Promise<string> {
   try {

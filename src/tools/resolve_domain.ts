@@ -1,15 +1,15 @@
 import { TldParser } from "@onsol/tldparser";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 import { PublicKey } from "@solana/web3.js";
 
 /**
  * Resolve all domains for a given agent and domain
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param domain Domain name to resolve
  * @returns Promise resolving to the domain or undefined if not found
  */
 export async function resolveAllDomains(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   domain: string,
 ): Promise<PublicKey | undefined> {
   try {

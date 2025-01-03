@@ -4,7 +4,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { Wallet } from "@coral-xyz/anchor";
 import { Decimal } from "decimal.js";
 import {
@@ -28,7 +28,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * The required amount of the other token is calculated automatically.
  *
  * ## Parameters
- * - `agent`: The `SolanaAgentKit` instance representing the wallet and connection details.
+ * - `agent`: The `SonicAgentKit` instance representing the wallet and connection details.
  * - `whirlpoolAddress`: The address of the Orca Whirlpool where the position will be opened.
  * - `distanceFromCurrentPriceBps`: The basis point offset from the current price for the lower bound.
  * - `widthBps`: The width of the range as a percentage increment from the lower bound.
@@ -43,7 +43,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * - The `widthBps` determines the range size from the lower bound.
  * - The specified `inputTokenMint` determines which token is deposited directly.
  *
- * @param agent - The `SolanaAgentKit` instance representing the wallet and connection.
+ * @param agent - The `SonicAgentKit` instance representing the wallet and connection.
  * @param whirlpoolAddress - The address of the Orca Whirlpool.
  * @param distanceFromCurrentPriceBps - The basis point offset from the current price for the lower bound.
  * @param widthBps - The width of the range as a percentage increment from the lower bound.
@@ -52,7 +52,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * @returns A promise resolving to the transaction ID (`string`).
  */
 export async function orcaOpenSingleSidedPosition(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   whirlpoolAddress: PublicKey,
   distanceFromCurrentPriceBps: number,
   widthBps: number,

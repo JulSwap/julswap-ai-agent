@@ -1,15 +1,15 @@
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { PublicKey } from "@solana/web3.js";
 import { TldParser } from "@onsol/tldparser";
 
 /**
  * Get all domains owned domains for a specific TLD for the agent's wallet
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param owner - PublicKey of the owner
  * @returns Promise resolving to an array of owned domains or an empty array if none are found
  */
 export async function getOwnedAllDomains(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   owner: PublicKey,
 ): Promise<string[]> {
   try {

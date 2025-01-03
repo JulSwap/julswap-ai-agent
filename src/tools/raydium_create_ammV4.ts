@@ -9,10 +9,10 @@ import {
 import { MintLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 export async function raydiumCreateAmmV4(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   marketId: PublicKey,
   baseAmount: BN,
   quoteAmount: BN,

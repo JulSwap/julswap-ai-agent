@@ -1,4 +1,4 @@
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 import { TensorSwapSDK } from "@tensor-oss/tensorswap-sdk";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
@@ -10,7 +10,7 @@ import {
 } from "@solana/spl-token";
 
 export async function listNFTForSale(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   nftMint: PublicKey,
   price: number,
 ): Promise<string> {
@@ -73,7 +73,7 @@ export async function listNFTForSale(
 }
 
 export async function cancelListing(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   nftMint: PublicKey,
 ): Promise<string> {
   const provider = new AnchorProvider(

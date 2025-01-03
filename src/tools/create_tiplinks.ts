@@ -13,12 +13,12 @@ import {
   getMint,
   createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 const MINIMUM_SOL_BALANCE = 0.003 * LAMPORTS_PER_SOL;
 
 export async function create_TipLink(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   amount: number,
   splmintAddress?: PublicKey,
 ): Promise<{ url: string; signature: string }> {

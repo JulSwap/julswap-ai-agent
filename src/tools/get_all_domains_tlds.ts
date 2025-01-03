@@ -1,13 +1,13 @@
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 import { getAllTld } from "@onsol/tldparser";
 
 /**
  * Get all active top-level domains (TLDs) in the AllDomains Name Service
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @returns Array of active TLD strings
  */
 export async function getAllDomainsTLDs(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
 ): Promise<string[]> {
   try {
     const tlds = await getAllTld(agent.connection);

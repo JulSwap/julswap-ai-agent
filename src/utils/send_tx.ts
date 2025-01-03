@@ -1,4 +1,4 @@
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import {
   Keypair,
   Signer,
@@ -20,7 +20,7 @@ const feeTiers = {
  * @returns Priority fees statistics and instructions for different fee levels
  */
 export async function getComputeBudgetInstructions(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   instructions: TransactionInstruction[],
   feeTier: keyof typeof feeTiers,
 ): Promise<{
@@ -70,12 +70,12 @@ export async function getComputeBudgetInstructions(
 
 /**
  * Send a transaction with priority fees
- * @param agent - SolanaAgentKit instance
+ * @param agent - SonicAgentKit instance
  * @param tx - Transaction to send
  * @returns Transaction ID
  */
 export async function sendTx(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   instructions: TransactionInstruction[],
   otherKeypairs?: Keypair[],
 ) {

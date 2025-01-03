@@ -7,10 +7,10 @@ import {
 import { MintLayout } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 export async function raydiumCreateCpmm(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   mintA: PublicKey,
   mintB: PublicKey,
   configId: PublicKey,

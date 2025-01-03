@@ -4,7 +4,7 @@ import {
   sendAndConfirmTransaction,
   TransactionInstruction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 import {
   ManifestClient,
   WrapperPlaceOrderParamsExternal,
@@ -13,7 +13,7 @@ import { OrderType } from "@cks-systems/manifest-sdk/client/ts/src/wrapper/types
 
 /**
  * Place limit orders using Manifest
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param marketId Public key for the manifest market
  * @param quantity Amount to trade in tokens
  * @param side Buy or Sell
@@ -21,7 +21,7 @@ import { OrderType } from "@cks-systems/manifest-sdk/client/ts/src/wrapper/types
  * @returns Transaction signature
  */
 export async function limitOrder(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   marketId: PublicKey,
   quantity: number,
   side: string,

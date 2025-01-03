@@ -5,7 +5,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { Wallet } from "@coral-xyz/anchor";
 import { Decimal } from "decimal.js";
 import {
@@ -31,7 +31,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * is calculated automatically.
  *
  * ## Parameters
- * - `agent`: The `SolanaAgentKit` instance representing the wallet and connection details.
+ * - `agent`: The `SonicAgentKit` instance representing the wallet and connection details.
  * - `whirlpoolAddress`: The address of the Orca Whirlpool where the position will be opened.
  * - `priceOffsetBps`: The basis point (bps) offset (on one side) from the current price fo the pool. For example,
  *   500 bps (5%) creates a range from 95% to 105% of the current pool price.
@@ -54,7 +54,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * - The transaction fails to send.
  * - Any required mint information cannot be fetched.
  *
- * @param agent - The `SolanaAgentKit` instance representing the wallet and connection.
+ * @param agent - The `SonicAgentKit` instance representing the wallet and connection.
  * @param whirlpoolAddress - The address of the Orca Whirlpool.
  * @param priceOffsetBps - The basis point offset (one side) from the current pool price.
  * @param inputTokenMint - The mint address of the token to deposit.
@@ -62,7 +62,7 @@ import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
  * @returns A promise resolving to the transaction ID (`string`).
  */
 export async function orcaOpenCenteredPositionWithLiquidity(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   whirlpoolAddress: PublicKey,
   priceOffsetBps: number,
   inputTokenMint: PublicKey,

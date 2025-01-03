@@ -1,4 +1,4 @@
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { Wallet } from "@coral-xyz/anchor";
 import {
   ORCA_WHIRLPOOL_PROGRAM_ID,
@@ -27,7 +27,7 @@ type PositionDataMap = {
  * - Distance from the center price to the current price in basis points.
  *
  * ## Parameters
- * - `agent`: The `SolanaAgentKit` instance representing the wallet and connection.
+ * - `agent`: The `SonicAgentKit` instance representing the wallet and connection.
  *
  * ## Returns
  * A JSON string with an object mapping position mint addresses to position details:
@@ -45,11 +45,11 @@ type PositionDataMap = {
  * - If positions cannot be fetched or processed.
  * - If the position mint address is invalid.
  *
- * @param agent - The `SolanaAgentKit` instance.
+ * @param agent - The `SonicAgentKit` instance.
  * @returns A JSON string with position data.
  */
 export async function orcaFetchPositions(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
 ): Promise<string> {
   try {
     const wallet = new Wallet(agent.wallet);

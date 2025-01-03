@@ -1,10 +1,10 @@
 import { VersionedTransaction } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
-import { GibworkCreateTaskReponse, SolanaAgentKit } from "../index";
+import { GibworkCreateTaskReponse, SonicAgentKit } from "../index";
 
 /**
  * Create an new task on Gibwork
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param title Title of the task
  * @param content Description of the task
  * @param requirements Requirements to complete the task
@@ -15,7 +15,7 @@ import { GibworkCreateTaskReponse, SolanaAgentKit } from "../index";
  * @returns Object containing task creation transaction and generated taskId
  */
 export async function create_gibwork_task(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   title: string,
   content: string,
   requirements: string,

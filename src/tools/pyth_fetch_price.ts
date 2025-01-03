@@ -3,7 +3,7 @@ import BN from "bn.js";
 
 /**
  * Fetch the price of a given price feed from Pyth
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param priceFeedID Price feed ID
  * @returns Latest price value from feed
  *

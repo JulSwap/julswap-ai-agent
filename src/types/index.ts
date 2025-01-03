@@ -1,5 +1,4 @@
-import { PublicKey } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { z } from "zod";
 
 export interface Config {
@@ -22,13 +21,13 @@ export interface CollectionOptions {
 
 // Add return type interface
 export interface CollectionDeployment {
-  collectionAddress: PublicKey;
-  signature: Uint8Array;
+  collectionAddress: string;
+  signature: string;
 }
 
 export interface MintCollectionNFTResponse {
-  mint: PublicKey;
-  metadata: PublicKey;
+  mint: string;
+  metadata: string;
 }
 
 export interface PumpFunTokenOptions {
@@ -113,7 +112,7 @@ export interface ActionExample {
  * Handler function type for executing the action
  */
 export type Handler = (
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   input: Record<string, any>,
 ) => Promise<Record<string, any>>;
 

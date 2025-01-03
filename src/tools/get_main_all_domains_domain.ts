@@ -2,8 +2,8 @@ import { getFavoriteDomain as _getFavoriteDomain } from "@bonfida/spl-name-servi
 import { PublicKey } from "@solana/web3.js";
 
 /**
- * Get the user's main/favorite domain for a SolanaAgentKit instance
- * @param agent SolanaAgentKit instance
+ * Get the user's main/favorite domain for a SonicAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param owner Owner's public key
  * @returns Promise resolving to the main domain name or null if not found
  */

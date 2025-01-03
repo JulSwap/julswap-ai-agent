@@ -1,15 +1,15 @@
 import { getAllDomains } from "@bonfida/spl-name-service";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { PublicKey } from "@solana/web3.js";
 import { getAllDomainsTLDs } from "./get_all_domains_tlds";
 
 /**
  * Get all registered domains across all TLDs
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @returns Array of all registered domain names with their TLDs
  */
 export async function getAllRegisteredAllDomains(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
 ): Promise<string[]> {
   try {
     // First get all TLDs

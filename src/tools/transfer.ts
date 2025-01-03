@@ -1,66 +1,87 @@
-import { SolanaAgentKit } from "../index";
-import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import {
-  getAssociatedTokenAddress,
-  createTransferInstruction,
-  getMint,
-} from "@solana/spl-token";
+import { SonicAgentKit } from "../agent";
+import { debug } from "../utils/debug";
 
-/**
- * Transfer SOL or SPL tokens to a recipient
- * @param agent SolanaAgentKit instance
- * @param to Recipient's public key
- * @param amount Amount to transfer
- * @param mint Optional mint address for SPL tokens
- * @returns Transaction signature
- */
+const ERC20_ABI = [
+  {
+    constant: false,
+    inputs: [
+      { name: "_to", type: "address" },
+      { name: "_value", type: "uint256" },
+    ],
+    name: "transfer",
+    outputs: [{ name: "", type: "bool" }],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "decimals",
+    outputs: [{ name: "", type: "uint8" }],
+    type: "function",
+  },
+];
+
 export async function transfer(
-  agent: SolanaAgentKit,
-  to: PublicKey,
+  agent: SonicAgentKit,
+  to: string,
   amount: number,
-  mint?: PublicKey,
+  tokenAddress?: string,
 ): Promise<string> {
+  debug.log("=== TRANSFER START ===");
+  debug.log("To address:", to);
+  debug.log("Amount:", amount);
+  debug.log("Token address:", tokenAddress);
+
   try {
     let tx: string;
+    const web3 = agent.connection;
 
-    if (!mint) {
-      // Transfer native SOL
-      const transaction = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: agent.wallet_address,
-          toPubkey: to,
-          lamports: amount * LAMPORTS_PER_SOL,
-        }),
+    if (!tokenAddress) {
+      // Transfer native BNB
+      const gasPrice = await web3.eth.getGasPrice();
+      const gasLimit = 21000; // Standard gas limit for ETH transfers
+
+      const transaction = {
+        from: agent.wallet_address,
+        to: to,
+        value: web3.utils.toWei(amount.toString(), "ether"),
+        gasPrice: gasPrice,
+        gas: gasLimit,
+      };
+
+      // Sign and send the transaction
+      const signedTx = await web3.eth.accounts.signTransaction(
+        transaction,
+        process.env.SONIC_PRIVATE_KEY!,
       );
 
-      tx = await agent.connection.sendTransaction(transaction, [agent.wallet]);
+      if (!signedTx.rawTransaction) {
+        throw new Error("Failed to sign transaction");
+      }
+
+      debug.log("Signed transaction:", signedTx);
+      const result = await web3.eth.sendSignedTransaction(
+        signedTx.rawTransaction,
+      );
+      tx = result.transactionHash;
+      debug.log("Native transfer hash:", tx);
     } else {
-      // Transfer SPL token
-      const fromAta = await getAssociatedTokenAddress(
-        mint,
-        agent.wallet_address,
-      );
-      const toAta = await getAssociatedTokenAddress(mint, to);
+      // Transfer ERC20 token
+      const contract = new web3.eth.Contract(ERC20_ABI, tokenAddress);
+      const decimals = await contract.methods.decimals().call();
+      const adjustedAmount = amount * Math.pow(10, decimals);
 
-      // Get mint info to determine decimals
-      const mintInfo = await getMint(agent.connection, mint);
-      const adjustedAmount = amount * Math.pow(10, mintInfo.decimals);
-
-      const transaction = new Transaction().add(
-        createTransferInstruction(
-          fromAta,
-          toAta,
-          agent.wallet_address,
-          adjustedAmount,
-        ),
-      );
-
-      tx = await agent.connection.sendTransaction(transaction, [agent.wallet]);
+      const result = await contract.methods
+        .transfer(to, adjustedAmount)
+        .send({ from: agent.wallet_address });
+      tx = result.transactionHash;
+      debug.log("Token transfer hash:", tx);
     }
 
+    debug.log("=== TRANSFER END ===");
     return tx;
   } catch (error: any) {
+    debug.log("Transfer error:", error.message);
     throw new Error(`Transfer failed: ${error.message}`);
   }
 }

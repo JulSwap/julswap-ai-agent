@@ -1,5 +1,5 @@
 import { VersionedTransaction, PublicKey } from "@solana/web3.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 import {
   TOKENS,
   DEFAULT_OPTIONS,
@@ -9,7 +9,7 @@ import {
 import { getMint } from "@solana/spl-token";
 /**
  * Swap tokens using Jupiter Exchange
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param outputMint Target token mint address
  * @param inputAmount Amount to swap (in token decimals)
  * @param inputMint Source token mint address (defaults to USDC)
@@ -18,7 +18,7 @@ import { getMint } from "@solana/spl-token";
  */
 
 export async function trade(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   outputMint: PublicKey,
   inputAmount: number,
   inputMint: PublicKey = TOKENS.USDC,

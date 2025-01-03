@@ -7,10 +7,10 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 export async function manifestCreateMarket(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   baseMint: PublicKey,
   quoteMint: PublicKey,
 ): Promise<string[]> {

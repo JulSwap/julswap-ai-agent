@@ -4,7 +4,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { Wallet } from "@coral-xyz/anchor";
 import { Decimal } from "decimal.js";
 import {
@@ -31,7 +31,7 @@ import { FEE_TIERS } from "./orca_create_single_sided_liquidity_pool";
  * The Whirlpool program determines the token mint order, which might not match your expectation. This function
  * adjusts the input order as needed and inverts the initial price accordingly.
  *
- * @param agent - The `SolanaAgentKit` instance representing the wallet and connection details.
+ * @param agent - The `SonicAgentKit` instance representing the wallet and connection details.
  * @param mintDeploy - The mint of the token you want to deploy (e.g., SHARK).
  * @param mintPair - The mint of the token you want to pair the deployed mint with (e.g., USDC).
  * @param initialPrice - The initial price of `mintDeploy` in terms of `mintPair`.
@@ -49,7 +49,7 @@ import { FEE_TIERS } from "./orca_create_single_sided_liquidity_pool";
  * ```
  */
 export async function orcaCreateCLMM(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   mintDeploy: PublicKey,
   mintPair: PublicKey,
   initialPrice: Decimal,

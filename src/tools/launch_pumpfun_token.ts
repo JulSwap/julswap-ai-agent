@@ -3,7 +3,7 @@ import { VersionedTransaction, Keypair } from "@solana/web3.js";
 import {
   PumpfunLaunchResponse,
   PumpFunTokenOptions,
-  SolanaAgentKit,
+  SonicAgentKit,
 } from "../index";
 
 async function uploadMetadata(
@@ -61,7 +61,7 @@ async function uploadMetadata(
 }
 
 async function createTokenTransaction(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   mintKeypair: Keypair,
   metadataResponse: any,
   options?: PumpFunTokenOptions,
@@ -101,7 +101,7 @@ async function createTokenTransaction(
 }
 
 async function signAndSendTransaction(
-  kit: SolanaAgentKit,
+  kit: SonicAgentKit,
   tx: VersionedTransaction,
   mintKeypair: Keypair,
 ) {
@@ -146,7 +146,7 @@ async function signAndSendTransaction(
 
 /**
  * Launch a token on Pump.fun
- * @param agent - SolanaAgentKit instance
+ * @param agent - SonicAgentKit instance
  * @param tokenName - Name of the token
  * @param tokenTicker - Ticker of the token
  * @param description - Description of the token
@@ -155,7 +155,7 @@ async function signAndSendTransaction(
  * @returns - Signature of the transaction, mint address and metadata URI, if successful, else error
  */
 export async function launchPumpFunToken(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   tokenName: string,
   tokenTicker: string,
   description: string,

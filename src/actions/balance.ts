@@ -1,8 +1,8 @@
-import { PublicKey } from "@solana/web3.js";
 import { Action } from "../types/action";
-import { SolanaAgentKit } from "../agent";
+import { SonicAgentKit } from "../agent";
 import { z } from "zod";
 import { get_balance } from "../tools";
+import { debug } from "../utils/debug";
 
 const balanceAction: Action = {
   name: "BALANCE_ACTION",
@@ -13,9 +13,9 @@ const balanceAction: Action = {
     "show balance",
     "check token balance",
   ],
-  description: `Get the balance of a Solana wallet or token account.
+  description: `Get the BNB balance of a wallet address.
   If you want to get the balance of your wallet, you don't need to provide the tokenAddress.
-  If no tokenAddress is provided, the balance will be in SOL.`,
+  Balance will be returned in BNB.`,
   examples: [
     [
       {
@@ -23,9 +23,9 @@ const balanceAction: Action = {
         output: {
           status: "success",
           balance: "100",
-          token: "SOL",
+          token: "BNB",
         },
-        explanation: "Get SOL balance of the wallet",
+        explanation: "Get BNB balance of the wallet",
       },
     ],
     [
@@ -45,17 +45,23 @@ const balanceAction: Action = {
   schema: z.object({
     tokenAddress: z.string().optional(),
   }),
-  handler: async (agent: SolanaAgentKit, input: Record<string, any>) => {
-    const balance = await get_balance(
-      agent,
-      input.tokenAddress && new PublicKey(input.tokenAddress),
-    );
+  handler: async (agent: SonicAgentKit, input: Record<string, any>) => {
+    debug.log("=== BALANCE ACTION START ===");
+    debug.log("Input:", input);
+    debug.log("Agent wallet:", agent.wallet_address);
 
-    return {
+    const balance = await get_balance(agent, input.tokenAddress);
+    debug.log("Retrieved balance:", balance);
+
+    const result = {
       status: "success",
       balance: balance,
-      token: input.tokenAddress || "SOL",
+      token: input.tokenAddress || "BNB",
     };
+    debug.log("=== BALANCE ACTION END ===");
+    debug.log("Result:", result);
+
+    return result;
   },
 };
 

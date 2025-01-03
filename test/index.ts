@@ -1,3 +1,12 @@
+import { debug } from "../src/utils/debug";
+
+// Enable debug logs
+debug.enable();
+
+// Disable OpenAI debug logs
+process.env.LANGCHAIN_VERBOSE = "false";
+process.env.OPENAI_API_DEBUG = "false";
+
 import { SonicAgentKit, ACTIONS } from "../src";
 import { createSonicTools } from "../src/langchain";
 import { HumanMessage } from "@langchain/core/messages";
@@ -12,7 +21,7 @@ dotenv.config();
 
 function validateEnvironment(): void {
   const missingVars: string[] = [];
-  const requiredVars = ["OPENAI_API_KEY", "RPC_URL", "SOLANA_PRIVATE_KEY"];
+  const requiredVars = ["OPENAI_API_KEY", "SONIC_RPC_URL", "SONIC_PRIVATE_KEY"];
 
   requiredVars.forEach((varName) => {
     if (!process.env[varName]) {
@@ -51,12 +60,27 @@ async function initializeAgent() {
     }
 
     const sonicAgent = new SonicAgentKit(
-      process.env.SOLANA_PRIVATE_KEY!,
-      process.env.RPC_URL!,
+      process.env.SONIC_PRIVATE_KEY!,
+      process.env.SONIC_RPC_URL!,
       {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY!,
       },
     );
+
+    // Print wallet address
+    const walletAddress = sonicAgent.wallet_address;
+    console.log(`Wallet Address: ${walletAddress}`);
+
+    // Get network information
+    const web3 = sonicAgent.connection;
+    const [chainId, nodeInfo] = await Promise.all([
+      web3.eth.getChainId(),
+      web3.eth.getNodeInfo()
+    ]);
+    console.log(`Connected to network:
+      Chain ID: ${chainId}
+      Node Info: ${nodeInfo}
+    `);
 
     const tools = createSonicTools(sonicAgent);
 

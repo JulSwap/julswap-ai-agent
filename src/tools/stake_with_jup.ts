@@ -1,14 +1,14 @@
 import { VersionedTransaction } from "@solana/web3.js";
-import { SolanaAgentKit } from "../index";
+import { SonicAgentKit } from "../index";
 
 /**
  * Stake SOL with Jup validator
- * @param agent SolanaAgentKit instance
+ * @param agent SonicAgentKit instance
  * @param amount Amount of SOL to stake
  * @returns Transaction signature
  */
 export async function stakeWithJup(
-  agent: SolanaAgentKit,
+  agent: SonicAgentKit,
   amount: number,
 ): Promise<string> {
   try {
