@@ -77,7 +77,7 @@ async function approveToken(
     // Sign and send transaction
     const signedTx = await agent.connection.eth.accounts.signTransaction(
       tx,
-      agent.private_key,
+      process.env.PRIVATE_KEY! ?? agent.private_key,
     );
 
     if (!signedTx.rawTransaction) {
@@ -85,7 +85,7 @@ async function approveToken(
     }
 
     const receipt = await agent.connection.eth.sendSignedTransaction(
-      signedTx.rawTransaction
+      signedTx.rawTransaction,
     );
 
     debug.log("Token approved:", receipt.transactionHash);
