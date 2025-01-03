@@ -2,6 +2,7 @@ import { Tool } from "langchain/tools";
 import { SonicAgentKit } from "../index";
 import { ACTIONS } from "../actions";
 import { debug } from "../utils/debug";
+import { BNB_ADDRESS, BUSD_ADDRESS, DEFAULT_SLIPPAGE } from "../constants";
 
 export class SonicBalanceTool extends Tool {
   name = "sonic_balance";
@@ -164,11 +165,59 @@ export class SonicPriceTool extends Tool {
   }
 }
 
+export class SonicTradeTool extends Tool {
+  name = "sonic_trade";
+  description = `Trade tokens on BSC.
+  You can use token symbols (like BNB, BUSD) or contract addresses.
+  Examples: 
+  - trade bnb to 0xf5d8...
+  - trade 0.1 bnb to busd
+  - trade 100 busd to bnb`;
+
+  constructor(private sonickit: SonicAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      debug.log("Trade input:", input);
+
+      // Extract amount if present, default to 0.1 if not specified
+      const amount = input.match(/[\d.]+/)?.[0];
+
+      // Extract any ethereum address
+      const address = input.match(/0x[a-fA-F0-9]{40}/i)?.[0];
+
+      // Determine from/to tokens based on input
+      const isFromBnb = input.toLowerCase().includes("bnb to");
+      const isToBnb = input.toLowerCase().includes("to bnb");
+
+      const fromToken = isFromBnb ? BNB_ADDRESS : address;
+      const toToken = isToBnb ? BNB_ADDRESS : address;
+
+      const result = await ACTIONS.TRADE_ACTION.handler(this.sonickit, {
+        fromToken,
+        toToken,
+        amount,
+        slippage: DEFAULT_SLIPPAGE,
+      });
+
+      return `Successfully traded ${amount} tokens. Transaction hash: ${result.txHash}`;
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
 export function createSonicTools(sonicKit: SonicAgentKit) {
   return [
     new SonicBalanceTool(sonicKit),
     new SonicTransferTool(sonicKit),
     new SonicDeployTokenTool(sonicKit),
     new SonicPriceTool(sonicKit),
+    new SonicTradeTool(sonicKit),
   ];
 }

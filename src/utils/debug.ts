@@ -1,15 +1,19 @@
-let isDebugEnabled = false;
+class Debug {
+  private isDebugEnabled: boolean = false;
 
-export const debug = {
-  enable: () => {
-    isDebugEnabled = true;
-  },
-  disable: () => {
-    isDebugEnabled = false;
-  },
-  log: (...args: any[]) => {
-    if (isDebugEnabled) {
-      console.log("[DEBUG]", ...args);
+  enable(): void {
+    this.isDebugEnabled = true;
+  }
+
+  disable(): void {
+    this.isDebugEnabled = false;
+  }
+
+  log(...args: any[]): void {
+    if (this.isDebugEnabled) {
+      console.log("[TERMINAL DEBUG]", ...args);
     }
-  },
-};
+  }
+}
+
+export const debug = new Debug();
