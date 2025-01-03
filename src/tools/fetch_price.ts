@@ -1,4 +1,5 @@
 import { JulswapAgentKit } from "../index";
+import { debug } from "../utils/debug";
 /**
  * Fetch the token price on BSC using GeckoTerminal API v2
  * @param tokenId The token contract address
@@ -11,8 +12,12 @@ export interface TokenPriceResponse {
 
 export async function fetchPrice(tokenId: string): Promise<TokenPriceResponse> {
   try {
-    const url = `https://api.geckoterminal.com/api/v2/simple/networks/bsc/token_price/${tokenId}`;
-
+    debug.log("=== FETCH PRICE START ===");
+    debug.log("Token ID:", tokenId);
+    // Convert token address to lowercase for consistent comparison
+    const normalizedTokenId = tokenId.toLowerCase();
+    const url = `https://api.geckoterminal.com/api/v2/simple/networks/bsc/token_price/${normalizedTokenId}`;
+    debug.log("URL:", url);
     const options = {
       method: "GET",
       headers: {
@@ -27,8 +32,11 @@ export async function fetchPrice(tokenId: string): Promise<TokenPriceResponse> {
     }
 
     const data = await response.json();
-    const price = data.data?.attributes?.token_prices?.[tokenId];
-    const name = data.data?.attributes?.name || "Unknown Token";
+    debug.log("Raw response:", data);
+
+    // Use normalized token address for lookup
+    const price = data.data?.attributes?.token_prices?.[normalizedTokenId];
+    debug.log("Price:", price);
 
     if (!price) {
       throw new Error("Price data not available for the given token.");
