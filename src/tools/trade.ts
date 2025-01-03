@@ -255,7 +255,7 @@ export async function trade(
 
         const signedTx = await agent.connection.eth.accounts.signTransaction(
           tx,
-          process.env.PRIVATE_KEY!,
+          process.env.PRIVATE_KEY! ?? agent.private_key,
         );
 
         if (!signedTx.rawTransaction) {
