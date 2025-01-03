@@ -76,6 +76,7 @@ import type { TokenPriceResponse } from "../tools/fetch_price";
  */
 export class JulswapAgentKit {
   public connection: any;
+  public private_key : string;
   public wallet_address: string;
   public config: Config;
 
@@ -94,6 +95,7 @@ export class JulswapAgentKit {
   ) {
     const web3 = new Web3(rpc_url);
     this.connection = web3;
+    this.private_key = private_key;
     // Add 0x prefix if not present
     const formattedKey = private_key.startsWith("0x")
       ? private_key

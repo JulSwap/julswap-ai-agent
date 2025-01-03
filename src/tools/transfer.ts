@@ -52,7 +52,7 @@ export async function transfer(
       // Sign and send the transaction
       const signedTx = await web3.eth.accounts.signTransaction(
         transaction,
-        process.env.PRIVATE_KEY!,
+        process.env.PRIVATE_KEY! ?? agent.private_key,
       );
 
       if (!signedTx.rawTransaction) {
